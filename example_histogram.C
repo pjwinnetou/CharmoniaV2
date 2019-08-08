@@ -10,5 +10,8 @@ hist -> Fill(3);
 hist -> Fill(3);
 hist -> Fill(4);
 hist -> Draw();
+
+
+new LINE
 }
 
