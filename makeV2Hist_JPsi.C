@@ -23,9 +23,9 @@ using namespace hi;
 
 void GetHistSqrt(TH1D* h1 =0, TH1D* h2=0);
 
-void makeV2Hist_JPsi(int cLow = 40, int cHigh = 80,
-                double ptLow = 10.0, double ptHigh = 15.0, 
-                double yLow = 0.0, double yHigh=2.4, double ctauCut=0.031,
+void makeV2Hist_JPsi(int cLow = 20, int cHigh = 120,
+                double ptLow = 6.5, double ptHigh = 9.0, 
+                double yLow = 1.6, double yHigh=2.4, double ctauCut=0.043,
                 float SiMuPtCut = 0, float massLow = 2.6, float massHigh =3.5, bool dimusign=true, bool fAccW = true, bool fEffW = true)
 {
   //Basic Setting
