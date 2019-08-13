@@ -9,10 +9,15 @@
 #include "TROOT.h"
 #include "TSystem.h"
 #include "Style_jaebeom.h"
-
+#include <TLegend.h>
+#include <TLatex.h>
+#include <TCanvas.h>
+#include <TText.h>
+#include <TString.h>
+#include <TMath.h>
 using namespace std;
 
-void ctau_eff_MC_pmpt_nonpmpt_jaebeomEx(float ptlow = 3, float pthigh = 4.5, float ylow = 1.8, float yhigh = 2.4 ){
+void ctau_eff_MC_pmpt_nonpmpt_jaebeomEx(float ptlow = 3, float pthigh = 5, float ylow = 1.6, float yhigh = 2.4 ){
 
   const int nbin = 200; 
   TH1D *h1 = new TH1D("h1","C#tau Efficiency (MC);C#tau;Efficiency",nbin,-0.2,1);
@@ -23,8 +28,8 @@ void ctau_eff_MC_pmpt_nonpmpt_jaebeomEx(float ptlow = 3, float pthigh = 4.5, flo
 
   TCanvas *c1 = new TCanvas("c1","canvas",800,650);
 
-  TFile *f1 = new TFile("OniaSkimSimple_isMC1.root","read");
-  TFile *f2 = new TFile("OniaSkimSimple_nonPmpt_isMC1.root");
+  TFile *f1 = new TFile("../OniaSkimSimple_isMC1.root","read");
+  TFile *f2 = new TFile("../OniaSkimSimple_nonPmpt_isMC1.root");
 
   TTree *tree1 = (TTree*) f1 -> Get("dimutree");
   TTree *tree2 = (TTree*) f2 -> Get("dimutree");
@@ -163,7 +168,35 @@ file.close();
   c1 -> cd();  
   h1 -> Draw();
   h2 -> Draw("same");
-  h2->SetLineColor(kRed);
+  h1 -> SetLineColor(kRed);
+  h2->SetLineColor(kBlue);
+
+
+   float pos_x = 0.23;
+     float pos_x_mass = 0.53;
+      float pos_y = 0.76;
+       float pos_y_diff = 0.071;
+        int text_color = 1;
+        float text_size = 16;
+         TString perc = "%";
+
+
+  TLegend *leg = new TLegend(0.6, 0.35, 0.55, 0.5);
+  SetLegendStyle(leg);
+  leg -> AddEntry(h1, "C#tau efficiency (Prompt)", "l");
+  leg -> AddEntry(h2, "C#tau efficiency (Non-Prompt)", "l");
+  leg -> Draw ("same");
+
+ if(ptlow==0) drawText(Form("p_{t}^{#mu#mu} < %.1f gev/c",pthigh ),pos_x_mass,pos_y,text_color,text_size);
+  else if(ptlow!=0) drawText(Form("%.1f < p_{t}^{#mu#mu} < %.1f gev/c",ptlow, pthigh ),pos_x_mass,pos_y,text_color,text_size);
+    if(ylow==0) drawText(Form("|y^{#mu#mu}| < %.1f",yhigh ), pos_x_mass,pos_y-pos_y_diff,text_color,text_size);
+    else if(ylow!=0) drawText(Form("%.1f < |y^{#mu#mu}| < %.1f",ylow, yhigh ), pos_x_mass,pos_y-pos_y_diff,text_color,text_size);
+  //drawtext(form("p_{t}^{#mu} > %.1f gev/c", simuptcut ), pos_x_mass,pos_y-pos_y_diff*2,text_color,text_size);
+   
+
+
+
+
   c1 -> SaveAs(Form("ctau_efficiency_MC_pmpt_nonpmpt_%s.pdf",label.Data())); 
 
   TFile *wf = new TFile(Form("ctau_efficiency_MC_pmpt_nonpmpt_%s.root",label.Data()),"recreate");
